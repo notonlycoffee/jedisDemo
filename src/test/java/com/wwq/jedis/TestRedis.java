@@ -4,6 +4,7 @@ import com.wwq.jedis.utils.RedisUtil;
 import org.junit.Before;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 
 import java.util.HashMap;
 import java.util.List;
@@ -158,10 +159,64 @@ public class TestRedis {
     @Test  //使用连接池操作redis
     public void testLast() {
         Jedis jedis = RedisUtil.getJedis();
-        jedis.set("userName_userName", "中文你好啊");
-        System.out.println(jedis.get("userName_userName"));
+//        jedis.set("userName_userName", "中文你好啊");
+//        System.out.println(jedis.get("userName_userName"));
+
+        //对key的模糊查询
+//        Set<String> keys = jedis.keys("*");
+//        Set<String> keys1 = jedis.keys("user.userId.*");
+
+        //失效时间,时间为5秒
+//        jedis.set("user.userId.1410", "hell");
+//        jedis.setex("user.userId.1410", 5, "james");
+//        long seconds = jedis.ttl("user.userId.1410");//返回该键的存活时间
+//        System.out.println(seconds);
+
+
+//        jedis.persist("user.userId.1410");//不再有失效时间,为-1
+//        long seconds2 = jedis.ttl("user.userId.1410");//返回该键的存活时间,为-1,永远不失效
+//        System.out.println(seconds2);
+
+
+//        jedis.incr("amout_amout");//自增
+
+//        jedis.incrBy("amout_amout", 20);//增加对应数字
+
+//        jedis.flushDB();//清空当前db
+
+//        jedis.flushAll();//清空所有db
+
+
+
+
+
+
+        Transaction tx = jedis.multi();//获取事务
+        for (int i = 0; i < 10; i++) {
+            tx.set("key" + i, "value" + i);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        tx.exec();//执行事务
+
+
+
+
+
+
+
         RedisUtil.returnResource(jedis);
+
     }
+
+
+
+
+
+
 
 
 
