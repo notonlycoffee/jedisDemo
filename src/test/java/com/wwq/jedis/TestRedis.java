@@ -1,5 +1,6 @@
 package com.wwq.jedis;
 
+import com.wwq.jedis.utils.RedisUtil;
 import org.junit.Before;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
@@ -154,6 +155,13 @@ public class TestRedis {
     }
 
 
+    @Test  //使用连接池操作redis
+    public void testLast() {
+        Jedis jedis = RedisUtil.getJedis();
+        jedis.set("userName_userName", "中文你好啊");
+        System.out.println(jedis.get("userName_userName"));
+        RedisUtil.returnResource(jedis);
+    }
 
 
 
